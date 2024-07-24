@@ -5,21 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualiser {{ crypto }}/USDT ({{ interval }})</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
-    <h1>Cours de {{ crypto }}/USDT ({{ interval }})</h1>
-    <div id="graphique"></div>
-    <a href="{{ url_for('index') }}">Retour à l'accueil</a>
-    <script>
-       (function() {
-           var graphiqueJSONString = '{{ graphique_json | tojson | safe }}';
-           if (graphiqueJSONString) {
-               var graphiqueJSON = JSON.parse(graphiqueJSONString);
-               Plotly.newPlot('graphique', graphiqueJSON.data, graphiqueJSON.layout);
-           } else {
-               console.log("Aucune donnée de graphique disponible");
-           }
-       })();
+    <div class="container">
+        <h1>Cours de {{ crypto }}/USDT ({{ interval }})</h1>
+        <div id="graphique" style="width:100%;height:600px;"></div>
+        <a href="{{ url_for('index') }}">Retour à l'accueil</a>
+    </div>
+    <div id="test-graph"></div>
+     <script>
+    (function() {
+        console.log("Début du script de visualisation");
+        var graphiqueJSONString = '{{ graphique_json | safe }}';
+        console.log("Longueur de graphiqueJSONString:", graphiqueJSONString.length);
+        console.log("Début de graphiqueJSONString:", graphiqueJSONString.substring(0, 500));
+        
+        try {
+            var graphiqueJSON = JSON.parse(graphiqueJSONString);
+            console.log("graphiqueJSON parsé avec succès");
+            
+            Plotly.newPlot('graphique', graphiqueJSON.data, graphiqueJSON.layout);
+        } catch (error) {
+            console.error("Erreur lors du parsing ou de la création du graphique:", error);
+        }
+    })();
     </script>
 </body>
 </html>

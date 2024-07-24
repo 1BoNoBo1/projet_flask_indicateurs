@@ -103,6 +103,12 @@ def visualiser(crypto, interval):
         # Essayer de générer le graphique
         graphique_json = generer_graphique(df)
         
+        print("Contenu de graphique_json:", graphique_json) #debug  
+        print("Contenu de graphique_json:", graphique_json[:500])  # Imprime les 500 premiers caractères
+        print("Aperçu du DataFrame:")
+        print(df.head())
+        print("Types des colonnes:")
+        print(df.dtypes)
         return render_template('visualiser.html', graphique_json=graphique_json, crypto=crypto, interval=interval)
     
     except Exception as e:
@@ -134,7 +140,8 @@ def appliquer_strategie_route(crypto, interval):
             df_strategie = appliquer_strategie(df, longueurALMA, sigma, offset, decalage)
             metriques = calculer_metriques(df_strategie)
             graphique_json = generer_graphique_strategie(df_strategie)
-            
+            print("Contenu de graphique_json:", graphique_json[:500])  # debug Imprime les 500 premiers caractères
+
             return render_template('resultats_strategie.html', 
                                    graphique_json=graphique_json, 
                                    crypto=crypto, 
@@ -147,9 +154,10 @@ def appliquer_strategie_route(crypto, interval):
                                    },
                                    metriques=metriques)
         except Exception as e:
+            print(f"Erreur lors de l'application de la stratégie : {str(e)}")
             flash(f"Erreur lors de l'application de la stratégie : {str(e)}", "error")
             return redirect(url_for('index'))
-    
+        
     return render_template('appliquer_strategie.html', crypto=crypto, interval=interval)
 
 @app.route('/rapport/<crypto>/<interval>')

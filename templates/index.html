@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projet Flask Indicateurs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -40,8 +42,7 @@
     {% endif %}
     <h2>Comparer les stratégies</h2>
     <ul>
-        <li><a href="{{ url_for('comparer_strategies', crypto='BTC', interval='1d') }}">BTC/USDT (1 jour)</a></li>
-        <!-- Ajoutez d'autres paires et intervalles si nécessaire -->
+        <li><a href="{{ url_for('comparer_strategies', crypto='BTC', interval='1w') }}">BTC/USDT (1w)</a></li>
     </ul>
 </body>
 </html>

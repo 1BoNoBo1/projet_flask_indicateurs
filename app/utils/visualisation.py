@@ -2,6 +2,9 @@
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+import plotly.utils
+
+import json
 
 def generer_graphique(df):
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, 
@@ -24,7 +27,9 @@ def generer_graphique(df):
     fig.update_layout(height=800, title_text="Cours et Volume")
     fig.update_xaxes(rangeslider_visible=False)
 
-    return fig.to_json()
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+
 
 
 
@@ -77,7 +82,9 @@ def generer_graphique_strategie(df):
     fig.update_layout(height=1200, title_text="Analyse de la Stratégie de Trading")
     fig.update_xaxes(rangeslider_visible=False)
 
-    return fig.to_json()
+   # return fig.to_json()
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
 
 
 # Dans app/utils/visualisation.py
