@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appliquer la Stratégie - {{ crypto }}USDT {{ interval }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Appliquer la Stratégie - {{ crypto }}USDT {{ interval }}</title>
 </head>
 <body>
-    <h1>Appliquer la Stratégie pour {{ crypto }}USDT ({{ interval }})</h1>
+    <h1>Appliquer la stratégie pour {{ crypto }}/USDT ({{ interval }})</h1>
     <form method="POST">
         <label for="longueurALMA">Longueur ALMA:</label>
         <input type="number" id="longueurALMA" name="longueurALMA" value="10" min="1" required><br><br>

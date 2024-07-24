@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 
 def calculer_metriques(df):
+
+    
     # Rendements cumulatifs
     cumulative_returns = df['Cumulative_Strategy_Returns'].iloc[-1] - 1
     buy_hold_returns = df['Cumulative_Returns'].iloc[-1] - 1
@@ -20,6 +22,12 @@ def calculer_metriques(df):
     # Drawdown maximum
     drawdown = (df['Cumulative_Strategy_Returns'] / df['Cumulative_Strategy_Returns'].cummax() - 1).min()
 
+    # ...
+    if 'Signal' in df.columns:
+        trades = df['Signal'].diff().abs().sum() // 2
+    else:
+        trades = 0
+    # ...
     # Nombre de trades
     trades = df['Signal'].diff().abs().sum() // 2
 

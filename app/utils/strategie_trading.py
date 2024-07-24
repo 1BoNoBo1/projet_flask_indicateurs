@@ -13,8 +13,9 @@ def custom_alma(src, length, offset, sigma):
     return alma_val / sum_weight
 
 def calculer_alma(df, length, offset, sigma):
-    alma = df['close'].rolling(window=length).apply(lambda x: custom_alma(x, length, offset, sigma))
-    return alma
+    if 'close' not in df.columns:
+        raise ValueError("La colonne 'close' est manquante dans le DataFrame")
+    return df['close'].rolling(window=length).apply(lambda x: custom_alma(x, length, offset, sigma))
 
 def appliquer_strategie(df, longueurALMA=10, sigma=6, offset=0.85, decalage=3):
     df['ALMA_Base'] = calculer_alma(df, longueurALMA, offset, sigma)

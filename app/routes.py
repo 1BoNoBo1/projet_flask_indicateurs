@@ -64,7 +64,7 @@ def visualiser(crypto, interval):
     
     if not files:
         flash("Aucune donnée disponible pour cette crypto et cet intervalle.", "error")
-        return redirect(url_for('index'))
+        return redirect(url_for('index')), 302
     
     filename = files[0]
     filepath = os.path.join(app.config['DATA_DIR'], filename)
@@ -120,10 +120,14 @@ def visualiser(crypto, interval):
 @app.route('/appliquer_strategie/<crypto>/<interval>', methods=['GET', 'POST'])
 def appliquer_strategie_route(crypto, interval):
     if request.method == 'POST':
-        longueurALMA = int(request.form.get('longueurALMA', 10))
-        sigma = float(request.form.get('sigma', 6))
-        offset = float(request.form.get('offset', 0.85))
-        decalage = int(request.form.get('decalage', 3))
+        try:
+            longueurALMA = int(request.form.get('longueurALMA', 10))
+            sigma = float(request.form.get('sigma', 6))
+            offset = float(request.form.get('offset', 0.85))
+            decalage = int(request.form.get('decalage', 3))
+        except ValueError:
+            flash("Paramètres invalides", "error")
+            return redirect(url_for('index'))
         
         # Charger les données les plus récentes
         files = [f for f in os.listdir(app.config['DATA_DIR']) if f.startswith(f"{crypto}USDT_{interval}_") and f.endswith('.csv')]
