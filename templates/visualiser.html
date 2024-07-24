@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualiser les cours - {{ crypto }}USDT {{ interval }}</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Cours de {{ crypto }}USDT ({{ interval }})</h1>
+    <div id="graphique"></div>
+    <a href="{{ url_for('index') }}">Retour à l'accueil</a>
+    
+    <script>
+        var graphiqueJSON = {{ graphique_json | safe }};
+        Plotly.newPlot('graphique', graphiqueJSON.data, graphiqueJSON.layout);
+    </script>
+</body>
+</html>

@@ -8,5 +8,23 @@
 <body>
     <h1>Bienvenue sur le Projet Flask Indicateurs</h1>
     <p>Cette application est en cours de développement.</p>
+    <a href="{{ url_for('telecharger') }}">Télécharger les cours</a>
+    
+    <h2>Visualiser les cours</h2>
+    <ul>
+        <li><a href="{{ url_for('visualiser', crypto='BTC', interval='1d') }}">BTC/USDT (1 jour)</a></li>
+        <li><a href="{{ url_for('visualiser', crypto='ETH', interval='1d') }}">ETH/USDT (1 jour)</a></li>
+        <!-- Ajoutez d'autres liens selon vos besoins -->
+    </ul>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 </body>
 </html>
