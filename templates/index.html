@@ -6,25 +6,42 @@
     <title>Projet Flask Indicateurs</title>
 </head>
 <body>
-    <h1>Bienvenue sur le Projet Flask Indicateurs</h1>
-    <p>Cette application est en cours de développement.</p>
-    <a href="{{ url_for('telecharger') }}">Télécharger les cours</a>
-    
-    <h2>Visualiser les cours</h2>
-    <ul>
-        <li><a href="{{ url_for('visualiser', crypto='BTC', interval='1d') }}">BTC/USDT (1 jour)</a></li>
-        <li><a href="{{ url_for('visualiser', crypto='ETH', interval='1d') }}">ETH/USDT (1 jour)</a></li>
-        <!-- Ajoutez d'autres liens selon vos besoins -->
-    </ul>
-    
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <ul>
+            <ul class="messages">
             {% for category, message in messages %}
                 <li class="{{ category }}">{{ message }}</li>
             {% endfor %}
             </ul>
         {% endif %}
     {% endwith %}
+
+    <h1>Bienvenue sur le Projet Flask Indicateurs</h1>
+    <p>Cette application est en cours de développement.</p>
+    <a href="{{ url_for('telecharger') }}">Télécharger les cours</a>
+    
+    <h2>Données disponibles</h2>
+    {% if available_data %}
+        <h3>Visualiser les cours</h3>
+        <ul>
+        {% for symbol, interval in available_data %}
+            <li><a href="{{ url_for('visualiser', crypto=symbol, interval=interval) }}">{{ symbol }}/USDT ({{ interval }})</a></li>
+        {% endfor %}
+        </ul>
+        
+        <h3>Appliquer la stratégie</h3>
+        <ul>
+        {% for symbol, interval in available_data %}
+            <li><a href="{{ url_for('appliquer_strategie_route', crypto=symbol, interval=interval) }}">{{ symbol }}/USDT ({{ interval }})</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune donnée n'est actuellement disponible. Veuillez d'abord télécharger des cours.</p>
+    {% endif %}
+    <h2>Comparer les stratégies</h2>
+    <ul>
+        <li><a href="{{ url_for('comparer_strategies', crypto='BTC', interval='1d') }}">BTC/USDT (1 jour)</a></li>
+        <!-- Ajoutez d'autres paires et intervalles si nécessaire -->
+    </ul>
 </body>
 </html>

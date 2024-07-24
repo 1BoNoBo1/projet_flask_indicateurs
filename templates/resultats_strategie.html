@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de la Stratégie - {{ crypto }}USDT {{ interval }}</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Résultats de la Stratégie pour {{ crypto }}USDT ({{ interval }})</h1>
+    <h2>Paramètres utilisés:</h2>
+    <ul>
+        <li>Longueur ALMA: {{ parametres.longueurALMA }}</li>
+        <li>Sigma: {{ parametres.sigma }}</li>
+        <li>Offset: {{ parametres.offset }}</li>
+        <li>Décalage: {{ parametres.decalage }}</li>
+    </ul>
+    
+    <h2>Métriques de performance:</h2>
+    <table>
+        <tr>
+            <th>Métrique</th>
+            <th>Valeur</th>
+        </tr>
+        {% for metrique, valeur in metriques.items() %}
+        <tr>
+            <td>{{ metrique }}</td>
+            <td>{{ "%.2f"|format(valeur*100) }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <div id="graphique"></div>
+    <a href="{{ url_for('appliquer_strategie_route', crypto=crypto, interval=interval) }}">Modifier les paramètres</a>
+    <a href="{{ url_for('index') }}">Retour à l'accueil</a>
+    
+    <script>
+        var graphiqueJSON = {{ graphique_json | safe }};
+        Plotly.newPlot('graphique', graphiqueJSON.data, graphiqueJSON.layout);
+    </script>
+</body>
+</html>

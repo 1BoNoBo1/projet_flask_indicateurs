@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de Performance - {{ crypto }}/USDT ({{ interval }})</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Rapport de Performance - {{ crypto }}/USDT ({{ interval }})</h1>
+        
+        <div class="performance-metrics">
+            <h2>Métriques de Performance</h2>
+            <table>
+                <tr>
+                    <th>Métrique</th>
+                    <th>Valeur</th>
+                </tr>
+                {% for metrique, valeur in metriques.items() %}
+                <tr>
+                    <td>{{ metrique }}</td>
+                    <td>{{ "%.2f%%" | format(valeur * 100) if metrique not in ['Nombre de trades', 'Ratio profit/perte'] else "%.2f" | format(valeur) }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="performance-chart">
+            <h2>Graphique de Performance</h2>
+            <div id="graphique"></div>
+        </div>
+        
+        <a href="{{ url_for('index') }}" class="button">Retour à l'accueil</a>
+    </div>
+    <script>
+        (function() {
+            var graphiqueJSONString = '{{ graphique_json | tojson | safe }}';
+            if (graphiqueJSONString) {
+                var graphiqueJSON = JSON.parse(graphiqueJSONString);
+                Plotly.newPlot('graphique', graphiqueJSON.data, graphiqueJSON.layout);
+            } else {
+                console.log("Aucune donnée de graphique disponible");
+            }
+        })();
+    </script>
+</body>
+</html>

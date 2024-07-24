@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparaison des stratégies - {{ crypto }}/USDT ({{ interval }})</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Comparaison des stratégies - {{ crypto }}/USDT ({{ interval }})</h1>
+        
+        {% if results %}
+        <div class="performance-metrics">
+            <h2>Métriques de Performance</h2>
+            <table>
+                <tr>
+                    <th>Métrique</th>
+                    {% for result in results %}
+                    <th>{{ result.get('nom', 'Stratégie ' + loop.index|string) }}</th>
+                    {% endfor %}
+                </tr>
+                {% for metrique in results[0].get('metriques', {}) %}
+                <tr>
+                    <td>{{ metrique }}</td>
+                    {% for result in results %}
+                    <td>
+                        {% set valeur = result.get('metriques', {}).get(metrique) %}
+                        {% if valeur is number %}
+                            {% if metrique not in ['Nombre de trades', 'Ratio profit/perte'] %}
+                                {{ "%.2f%%" | format(valeur * 100) }}
+                            {% else %}
+                                {{ "%.2f" | format(valeur) }}
+                            {% endif %}
+                        {% else %}
+                            {{ valeur }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="performance-chart">
+            <h2>Graphique de Comparaison</h2>
+            <div id="graphique"></div>
+        </div>
+        {% else %}
+        <p>Aucun résultat à afficher.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('comparer_strategies', crypto=crypto, interval=interval) }}" class="button">Nouvelle comparaison</a>
+        <a href="{{ url_for('index') }}" class="button">Retour à l'accueil</a>
+    </div>
+    
+    {% if graphique_json %}
+    <script>
+        (function() {
+            var graphiqueJSONString = '{{ graphique_json | tojson | safe }}';
+            if (graphiqueJSONString) {
+                var graphiqueJSON = JSON.parse(graphiqueJSONString);
+                Plotly.newPlot('graphique', graphiqueJSON.data, graphiqueJSON.layout);
+            } else {
+                console.log("Aucune donnée de graphique disponible");
+            }
+        })();
+    </script>
+    {% endif %}
+</body>
+</html>

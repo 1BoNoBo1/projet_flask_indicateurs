@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparer les stratégies - {{ crypto }}/USDT ({{ interval }})</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Comparer les stratégies - {{ crypto }}/USDT ({{ interval }})</h1>
+        <form method="POST">
+            {% for i in range(1, 3) %}
+            <div class="strategy-form">
+                <h2>Stratégie {{ i }}</h2>
+                <label for="nom_{{ i }}">Nom de la stratégie:</label>
+                <input type="text" id="nom_{{ i }}" name="nom_{{ i }}" required>
+
+                <label for="longueurALMA_{{ i }}">Longueur ALMA:</label>
+                <input type="number" id="longueurALMA_{{ i }}" name="longueurALMA_{{ i }}" value="10" min="1" required>
+
+                <label for="sigma_{{ i }}">Sigma:</label>
+                <input type="number" id="sigma_{{ i }}" name="sigma_{{ i }}" value="6" step="0.1" min="0.1" required>
+
+                <label for="offset_{{ i }}">Offset:</label>
+                <input type="number" id="offset_{{ i }}" name="offset_{{ i }}" value="0.85" step="0.01" min="0" max="1" required>
+
+                <label for="decalage_{{ i }}">Décalage:</label>
+                <input type="number" id="decalage_{{ i }}" name="decalage_{{ i }}" value="3" min="1" required>
+            </div>
+            {% endfor %}
+            <input type="submit" value="Comparer les stratégies" class="button">
+        </form>
+        <a href="{{ url_for('index') }}" class="button">Retour à l'accueil</a>
+    </div>
+</body>
+</html>

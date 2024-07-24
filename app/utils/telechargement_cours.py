@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 from app import app
+import json
 
 def telecharger_cours(crypto='BTC', interval='1d', start_date=None, end_date=None):
     base_url = 'https://api.binance.com/api/v3/klines'
@@ -36,15 +37,24 @@ def telecharger_cours(crypto='BTC', interval='1d', start_date=None, end_date=Non
     
     return df
 
-def sauvegarder_donnees(df, crypto, interval, start_date, end_date):
+def sauvegarder_donnees(df, crypto, interval, start_date, end_date, data_dir=None):
+    if data_dir is None:
+        data_dir = app.config['DATA_DIR']
+    
     filename = f"{crypto}USDT_{interval}_{start_date}_{end_date}"
     
     # Sauvegarder en CSV
-    csv_path = os.path.join(app.config['DATA_DIR'], f'{filename}.csv')
+    csv_path = os.path.join(data_dir, f'{filename}.csv')
     df.to_csv(csv_path)
     
     # Sauvegarder en JSON
-    json_path = os.path.join(app.config['DATA_DIR'], f'{filename}.json')
-    df.to_json(json_path, orient='split')
+    json_path = os.path.join(data_dir, f'{filename}.json')
+    json_data = {
+        'columns': df.columns.tolist(),
+        'index': (df.index.astype(int) // 10**6).tolist(),  # Convertir en millisecondes
+        'data': df.values.tolist()
+    }
+    with open(json_path, 'w') as f:
+        json.dump(json_data, f)
     
     return csv_path, json_path
